@@ -66,7 +66,7 @@ class MeetingController extends Controller
                 'meeting' => $meeting
             ];
             return response()->json($message, 201);
-        }     
+        }
         $response = [
             'msg' => 'Eror during creating'
         ];
@@ -114,15 +114,15 @@ class MeetingController extends Controller
         $user_id = $request->input('user_id');
 
         $meeting = Meeting::with('users')->findOrFail($id);
-        dd($meeting->users());
+        //dd($user_id);
 
-        if (!$meeting->users->where('id', $user_id)->first()) {
+        if (!$meeting->users->where('id', 1)->first()) {
             return response()->json(['msg' => 'user not registered for meeting, update not successful'],401);
         };
 
         $meeting->time = $time;
         $meeting->title = $title;
-        $meeting->descriprion = $description;
+        $meeting->description = $description;
 
         if (!$meeting->update()){
             return response()->json([
@@ -151,7 +151,7 @@ class MeetingController extends Controller
         $meeting = Meeting::findOrFail($id);
         $users = $meeting->users;
         $meeting->users()->detach();
-        
+
         if (!$meeting->delete()){
             foreach ($users as $user){
                 $meeting->users()->attach($user);
